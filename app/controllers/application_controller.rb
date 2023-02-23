@@ -8,22 +8,10 @@ class ApplicationController < Sinatra::Base
     }.to_json
   end
 
-  post '/locations' do
-    new_location = Location.new(params[:location])
-    if new_location.save
-      {
-        location: new_location
-      }.to_json
-    else
-      {
-        message: "Oops something went wrong"
-      }.to_json
-    end
-  end
-
-  get '/locations/:id' do
-    location = Location.find(params[:id])
-    location.to_json
+  get "/venues" do
+    { 
+      venues: Venue.all
+    }.to_json
   end
 
   post '/venues' do
@@ -56,6 +44,37 @@ class ApplicationController < Sinatra::Base
   delete '/venues/:id' do
     venue = Venue.find(params[:id])
     venue.destroy
+  end
+
+  get "/locations" do
+    { 
+      locations: Location.all, 
+    }.to_json
+  end
+
+  post '/locations' do
+    new_location = Location.new(params[:location])
+    if new_location.save
+      {
+        location: new_location
+      }.to_json
+    else
+      {
+        message: "Oops something went wrong"
+      }.to_json
+    end
+  end
+
+  get '/locations/:id' do
+    location = Location.find(params[:id])
+    location.to_json
+  end
+
+  get '/locations/:id/venues' do
+    content_type :json
+    location = Location.find(params[:id])
+    venue = location.venues.new(params)
+    { venue: venue }.to_json
   end
 
   
