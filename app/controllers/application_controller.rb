@@ -6,7 +6,7 @@ class ApplicationController < Sinatra::Base
       locations: Location.all, 
       venues: Venue.all
     }.to_json
-  end
+  end 
 
   get "/venues" do
     { 
