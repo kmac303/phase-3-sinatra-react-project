@@ -64,7 +64,6 @@ class ApplicationController < Sinatra::Base
 
   patch '/location/:id' do
     location = Location.find(params[:id])
-    # binding.pry
     location.update(
       city: params[:city],
       state: params[:state],
