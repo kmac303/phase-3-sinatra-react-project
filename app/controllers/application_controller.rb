@@ -47,9 +47,6 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/locations" do
-    # { 
-    #   locations: Location.all, 
-    # }.to_json
     Location.all.to_json(include: :venues)
   end
 
