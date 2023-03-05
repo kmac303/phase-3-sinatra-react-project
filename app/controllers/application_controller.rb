@@ -32,14 +32,6 @@ class ApplicationController < Sinatra::Base
     venue.to_json
   end
 
-  patch '/venues/:id' do
-    venue = Venue.find(params[:name])
-    venue.update(
-      id: params[:id]
-    )
-    venue.to_json
-  end
-
   delete '/venues/:id' do
     venue = Venue.find(params[:id])
     venue.destroy
