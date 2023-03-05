@@ -34,7 +34,6 @@ class ApplicationController < Sinatra::Base
 
   patch '/venues/:id' do
     venue = Venue.find(params[:name])
-    # binding.pry
     venue.update(
       id: params[:id]
     )
