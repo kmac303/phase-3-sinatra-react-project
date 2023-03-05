@@ -47,9 +47,10 @@ class ApplicationController < Sinatra::Base
   end
 
   get "/locations" do
-    { 
-      locations: Location.all, 
-    }.to_json
+    # { 
+    #   locations: Location.all, 
+    # }.to_json
+    Location.all.to_json(include: :venues)
   end
 
   post '/locations' do
@@ -63,6 +64,17 @@ class ApplicationController < Sinatra::Base
         message: "Oops something went wrong"
       }.to_json
     end
+  end
+
+  patch '/location/:id' do
+    location = Location.find(params[:id])
+    # binding.pry
+    location.update(
+      city: params[:city],
+      state: params[:state],
+      image_url: params[:image_url]
+    )
+    location.to_json
   end
 
   get '/locations/:id' do
