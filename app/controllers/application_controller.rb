@@ -21,6 +21,7 @@ class ApplicationController < Sinatra::Base
         venue: new_venue
       }.to_json
     else
+
       {
         message: "Oops something went wrong"
       }.to_json
@@ -64,15 +65,20 @@ class ApplicationController < Sinatra::Base
     location.to_json
   end
 
+  delete '/locations/:id' do
+    location = Location.find(params[:id])
+    location.destroy
+  end
+
   get '/locations/:id' do
     location = Location.find(params[:id])
-    location.to_json
+    location.to_json(include: :venues)
   end
 
   get '/locations/:id/venues' do
     content_type :json
     location = Location.find(params[:id])
-    venue = location.venues.new(params)
+    venue = location.venues
     { venue: venue }.to_json
   end
 
