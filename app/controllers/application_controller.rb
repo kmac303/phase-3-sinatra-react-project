@@ -4,7 +4,7 @@ class ApplicationController < Sinatra::Base
   get "/" do
     { 
       locations: Location.all, 
-      venues: Venue.all
+      # venues: Venue.all
     }.to_json
   end 
 
@@ -14,19 +14,24 @@ class ApplicationController < Sinatra::Base
     }.to_json
   end
 
-  post '/venues' do
-    new_venue = Venue.new(params[:venue])
-    if new_venue.save
-      {
-        venue: new_venue
-      }.to_json
-    else
-
-      {
-        message: "Oops something went wrong"
-      }.to_json
-    end
+  get '/venues/new' do
+    venue = Venue.all
+    venue.to_json(include: :city)
   end
+
+  post '/venues' do
+    binding.pry
+    new_venue = Venue.create(
+      name: params[:name],
+      description: params[:description],
+      image_url: params[:image_url],
+      capacity: params[:capacity],
+      city: params[:city]
+    )
+    new_venue.to_json
+  end
+
+
 
   get '/venues/:id' do
     venue = Venue.find(params[:id])
@@ -43,31 +48,22 @@ class ApplicationController < Sinatra::Base
   end
 
   post '/locations' do
-    new_location = Location.new(params[:location])
-    if new_location.save
-      {
-        location: new_location
-      }.to_json
-    else
-      {
-        message: "Oops something went wrong"
-      }.to_json
-    end
+    new_location = Location.create(
+      city: params[:city],
+      state: params[:state],
+      image_url: params[:image_url]
+    )
+    new_location.to_json
   end
 
-  patch '/location/:id' do
-    location = Location.find(params[:id])
+  patch '/venues/:id' do
+    venue = Venue.find(params[:id])
     location.update(
       city: params[:city],
       state: params[:state],
       image_url: params[:image_url]
     )
     location.to_json
-  end
-
-  delete '/locations/:id' do
-    location = Location.find(params[:id])
-    location.destroy
   end
 
   get '/locations/:id' do
@@ -80,6 +76,11 @@ class ApplicationController < Sinatra::Base
     location = Location.find(params[:id])
     venue = location.venues
     { venue: venue }.to_json
+  end
+
+  delete '/locations/:id' do
+    location = Location.find(params[:id])
+    location.destroy
   end
 
   
