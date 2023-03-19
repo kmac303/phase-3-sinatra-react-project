@@ -4,7 +4,6 @@ class ApplicationController < Sinatra::Base
   get "/" do
     { 
       locations: Location.all, 
-      # venues: Venue.all
     }.to_json
   end 
 
@@ -20,15 +19,27 @@ class ApplicationController < Sinatra::Base
   end
 
   post '/venues' do
-    binding.pry
     new_venue = Venue.create(
       name: params[:name],
       description: params[:description],
       image_url: params[:image_url],
       capacity: params[:capacity],
-      city: params[:city]
+      location_id: params[:location_id]
     )
     new_venue.to_json
+  end
+
+  #   post '/venues' do
+  #   new_venue = Venue.new(params[:venue])
+  #     {
+  #       venue: new_venue
+  #     }.to_json
+  # end
+
+  delete '/venues/:id' do
+    venue = Venue.find(params[:id])
+    venue.destroy
+    venue.to_json
   end
 
 
@@ -58,12 +69,12 @@ class ApplicationController < Sinatra::Base
 
   patch '/venues/:id' do
     venue = Venue.find(params[:id])
-    location.update(
-      city: params[:city],
-      state: params[:state],
-      image_url: params[:image_url]
+    venue.update(
+      name: params[:name],
+      description: params[:description],
+      capacity: params[:capacity]
     )
-    location.to_json
+    venue.to_json
   end
 
   get '/locations/:id' do
@@ -77,12 +88,5 @@ class ApplicationController < Sinatra::Base
     venue = location.venues
     { venue: venue }.to_json
   end
-
-  delete '/locations/:id' do
-    location = Location.find(params[:id])
-    location.destroy
-  end
-
-  
 
 end
