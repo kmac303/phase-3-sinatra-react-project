@@ -1,10 +1,6 @@
 class ApplicationController < Sinatra::Base
   set :default_content_type, 'application/json'
 
-  get "/venues" do
-    Venue.all.to_json
-  end
-
   get '/venues/new' do
     venue = Venue.all
     venue.to_json(include: :city)
@@ -34,11 +30,6 @@ class ApplicationController < Sinatra::Base
   delete '/venues/:id' do
     venue = Venue.find(params[:id])
     venue.destroy
-  end
-
-  get '/venues/:id' do
-    venue = Venue.find(params[:id])
-    venue.to_json
   end
 
   get "/locations" do
