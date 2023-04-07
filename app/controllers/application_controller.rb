@@ -57,9 +57,4 @@ class ApplicationController < Sinatra::Base
     { venue: venue }.to_json
   end
 
-  delete '/locations/:id' do
-    location = Location.find(params[:id])
-    location.destroy
-  end
-
 end
